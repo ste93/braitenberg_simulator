@@ -81,9 +81,9 @@ function step()
 	position = calculate_postion() 
 
 	--speed of the wheels based on sensor's perceptions 
-	speed_right = robot.light[LEFT].value  + 	1 - gaussian(temperature(position.right)) + proximity_speed(robot.proximity[RIGHT].value)	+ organic_matter(position.right)
+	speed_right = robot.light[RIGHT].value + robot.proximity[RIGHT].value
 
-	speed_left = robot.light[RIGHT].value + 1 - gaussian(temperature(position.left)) + proximity_speed(robot.proximity[LEFT].value)+ organic_matter(position.left)
+	speed_left = robot.light[LEFT].value + robot.proximity[LEFT].value
 --[[
 	log("light left " .. robot.light[LEFT].value)
 	log("light right " .. robot.light[RIGHT].value)	
