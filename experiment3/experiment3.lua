@@ -12,20 +12,8 @@ function init()
 	robot.wheels.set_velocity(BASE_SPEED_LEFT, BASE_SPEED_RIGHT)
 end
 
---(E^(-((x-4)^2+(y+3)^2)/20))/2 + (E^(-((x+2)^2+(y-5)^2)/20))/2 
---y = (e ^ x^2 - 1)/2
 function proximity_speed(x)
-	--return x
-	--return (math.exp(math.pow(x,2))-1) / 2
-	--(e ^ 5x^5 )/150 
 	return math.exp(math.pow(x,5)* 5) / 150
-	if x < 0.4 then
-		return 0.1
-	elseif x < 0.8 then
-		return 0.5
-	else
-		return 1
-	end
 end
 
 function gaussian(x)
@@ -88,18 +76,7 @@ function step()
 
 	--speed of the wheels based on sensor's perceptions 
 	speed_right = 1 - proximity_speed(robot.proximity[LEFT].value)
-
 	speed_left =  1 - proximity_speed(robot.proximity[RIGHT].value)
---[[
-	log("light left " .. robot.light[LEFT].value)
-	log("light right " .. robot.light[RIGHT].value)	
-	log("temp right " .. gaussian(temperature(position.right)))
-	log("temp left " .. gaussian(temperature(position.left)))	]]
-	log("prox right " .. proximity_speed(robot.proximity[RIGHT].value))	
-	log("prox left " .. proximity_speed(robot.proximity[LEFT].value))
---[[	log("org right " .. organic_matter(position.right))
-	log("org left " .. organic_matter(position.left))
-]]
 	robot.wheels.set_velocity(BASE_SPEED_LEFT + speed_left*10, BASE_SPEED_RIGHT +speed_right*10)
 	log("speed right " .. speed_right)
 	log("speed left " .. speed_left)
