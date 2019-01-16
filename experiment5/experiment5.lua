@@ -1,41 +1,21 @@
 -- Put your global variables here
 BODY_RADIUS = 0.085036758
-RIGHT = 23
-LEFT = 2
-BASE_SPEED = 2
+RIGHT = 21
+LEFT = 4
+BASE_SPEED = 10
 BASE_SPEED_LEFT = BASE_SPEED
 BASE_SPEED_RIGHT = BASE_SPEED 
-
 
 --[[ This function is executed every time you press the 'execute'
      button ]]
 function init()
-	--robot.distance_scanner.enable()
 	--robot.wheels.set_velocity(BASE_SPEED_LEFT, BASE_SPEED_RIGHT)
 end
 
 --(E^(-((x-4)^2+(y+3)^2)/20))/2 + (E^(-((x+2)^2+(y-5)^2)/20))/2 
 --y = (e ^ x^2 - 1)/2
 function proximity_speed(x)
-	--return x
-	--return (math.exp(math.pow(x,2))-1) / 2
-	--(e ^ 5x^5 )/150 
-	return (math.exp(math.pow(x,5)* 5) / 150)
---[[	if x < 0.4 then
-		return 0.1
-	elseif x < 0.8 then
-		return 0.5
-	else
-		return 1
-	end]]
---	return x
---[[	if x < 0.2 then
-		return 0
-	elseif x < 0.8 then
-		return x
-	else
-		return 1
-	end]]
+
 end
 
 function gaussian(x)
@@ -95,31 +75,20 @@ function step()
 
 	--position of simulated sensors
 	position = calculate_postion() 
-
+	proximity_left = 0
+	proximity_right = 0
 	--speed of the wheels based on sensor's perceptions 
-	speed_right = proximity_speed(robot.proximity[21].value) + 1 - robot.light[RIGHT].value + 1 - gaussian(temperature(position.right))
 
-	speed_left =  proximity_speed(robot.proximity[4].value) + 1 - robot.light[LEFT].value + 1 - gaussian(temperature(position.left))
-	difference = speed_left - speed_right
---[[	if difference > 0 then
-		speed_right = 0 --speed_right / 2
-	elseif difference < 0 then
-		speed_left = 0 --speed_left / 2
-	end]]
---[[
-	log("light left " .. robot.light[LEFT].value)
-	log("light right " .. robot.light[RIGHT].value)	
-	log("temp right " .. gaussian(temperature(position.right)))
-	log("temp left " .. gaussian(temperature(position.left)))	]]
---	log("prox sensor" .. robot.distance_scanner.long_range)
-	log("prox right " .. speed_right)
-	log("prox left " .. speed_left)
---[[	log("org right " .. organic_matter(position.right))
-	log("org left " .. organic_matter(position.left))
-]]
+		proximity_right = (robot.proximity[21].value + robot.proximity[20].value + robot.proximity[22].value)/3
+
+		proximity_left =  (robot.proximity[4].value + robot.proximity[5].value + robot.proximity[3].value)/3
+
+	
+	speed_left = proximity_left
+	speed_right = proximity_right
 	robot.wheels.set_velocity((BASE_SPEED_LEFT + speed_left*10) * 5, (BASE_SPEED_RIGHT +speed_right*10) *5)
---	log("speed right " .. speed_right)
---	log("speed left " .. speed_left)
+	log("speed right " .. speed_right)
+	log("speed left " .. speed_left)
 end
 
 --[[ This function is executed every time you press the 'reset'
